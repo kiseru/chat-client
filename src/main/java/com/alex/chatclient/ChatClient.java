@@ -15,6 +15,11 @@ public class ChatClient {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
 
+        MessagesReceiver messagesReceiver = new MessagesReceiver(in);
+        messagesReceiver.setDaemon(true);
+        messagesReceiver.setPriority(Thread.MAX_PRIORITY);
+        messagesReceiver.start();
+
         String input;
         while ((input = userIn.readLine()) != null) {
 
@@ -29,11 +34,8 @@ public class ChatClient {
 
                 break;
             }
-
-            System.out.println(in.readLine());
         }
 
-        in.close();
         out.close();
         socket.close();
     }
