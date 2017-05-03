@@ -9,11 +9,17 @@ import java.net.Socket;
 public class ChatClient {
 
     public static void run() throws IOException, InterruptedException {
-        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+//        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+        Socket socket = new Socket("localhost", 5003);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Your login: ");
+        String login = userIn.readLine();
+        out.println(login);
+
 
         MessagesReceiver messagesReceiver = new MessagesReceiver(in);
         messagesReceiver.setPriority(Thread.MAX_PRIORITY);
