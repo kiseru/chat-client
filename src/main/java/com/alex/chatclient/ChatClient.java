@@ -8,15 +8,14 @@ import java.net.Socket;
 
 public class ChatClient {
 
-    public static void run() throws IOException {
-        Socket socket = new Socket("0.0.0.0", 5003);
-
+    public static void run() throws IOException, InterruptedException {
+//        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+        Socket socket = new Socket("localhost", 5003);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
 
         MessagesReceiver messagesReceiver = new MessagesReceiver(in);
-        messagesReceiver.setDaemon(true);
         messagesReceiver.setPriority(Thread.MAX_PRIORITY);
         messagesReceiver.start();
 
@@ -31,6 +30,10 @@ public class ChatClient {
                 // Inform user
                 String message = "You leave the chat";
                 System.out.println(message);
+
+                messagesReceiver.switchOff();
+
+                messagesReceiver.join();
 
                 break;
             }
