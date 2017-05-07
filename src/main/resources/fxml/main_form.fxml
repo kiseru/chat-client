@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.alex.chatclient.MainController">
+   <children>
+      <Button layoutX="480.0" layoutY="325.0" mnemonicParsing="false" onMouseClicked="#sendAction" prefHeight="30.0" prefWidth="100.0" text="Отправить" />
+      <TextField fx:id="inputTextField" layoutX="20.0" layoutY="325.0" prefHeight="30.0" prefWidth="450.0" />
+      <TextArea fx:id="outputTextArea" editable="false" layoutX="20.0" layoutY="14.0" prefHeight="262.0" prefWidth="560.0" />
+      <Button layoutX="480.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#disconnectAction" prefHeight="30.0" prefWidth="100.0" text="Отключиться" />
+      <Button layoutX="370.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#connectAction" prefHeight="30.0" prefWidth="100.0" text="Подключиться" />
+   </children>
+</Pane>

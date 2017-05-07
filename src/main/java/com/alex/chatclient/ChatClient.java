@@ -8,21 +8,26 @@ import java.net.Socket;
 
 public class ChatClient {
 
-    public static void run() throws IOException, InterruptedException {
-        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+    public static void run(AppInitializer form) throws IOException, InterruptedException {
+//        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+        Socket socket = new Socket("localhost", 5003);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
 
+
         System.out.println("Your login: ");
         String login = userIn.readLine();
         out.println(login);
 
+        System.out.println("Your group: ");
+        String group = userIn.readLine();
+        out.println(group);
 
-        MessagesReceiver messagesReceiver = new MessagesReceiver(in);
-        messagesReceiver.setPriority(Thread.MAX_PRIORITY);
-        messagesReceiver.start();
+//        MessagesReceiver messagesReceiver = new MessagesReceiver(in, form);
+//        messagesReceiver.setPriority(Thread.MAX_PRIORITY);
+//        messagesReceiver.start();
 
         String input;
         while ((input = userIn.readLine()) != null) {
@@ -32,13 +37,9 @@ public class ChatClient {
             // Exit condition
             if (input.equalsIgnoreCase("exit")) {
 
-                // Inform user
-                String message = "You leave the chat";
-                System.out.println(message);
-
-                messagesReceiver.switchOff();
-
-                messagesReceiver.join();
+                // Отключаем получатель сообщений и ждем завершения его работы
+//                messagesReceiver.switchOff();
+//                messagesReceiver.join();
 
                 break;
             }
