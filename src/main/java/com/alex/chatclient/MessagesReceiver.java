@@ -30,8 +30,6 @@ public class MessagesReceiver extends Thread {
             String message;
             try {
                 if ((message = reader.readLine()) != null) {
-                    System.out.println(message);
-
                     String text = output.getText();
 
                     output.setText(text + message + "\n");

@@ -2,6 +2,7 @@ package com.alex.chatclient;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +19,10 @@ public class MainController {
     public TextArea outputTextArea;
 
     public static PrintWriter out;
+
+    public Button disconnectionButton;
+    public Button connectionButton;
+    public Button sendButton;
 
     private Stage dialogStage;
     private MainForm mainForm;
@@ -40,6 +45,10 @@ public class MainController {
         ConnectionController.dialogStage = connectionDialogStage;
 
         connectionDialogStage.showAndWait();
+
+        connectionButton.setDisable(true);
+        disconnectionButton.setDisable(false);
+        sendButton.setDisable(false);
     }
 
     public void setDialogStage(Stage dialogStage) {

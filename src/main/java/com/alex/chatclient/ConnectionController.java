@@ -38,7 +38,7 @@ public class ConnectionController {
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
-        Socket socket = new Socket("localhost", 5003);
+        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
