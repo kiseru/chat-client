@@ -26,6 +26,7 @@
                                 <mainClass>com.alex.chatclient.AppInitializer</mainClass>
                             </manifest>
                         </archive>
+
                         <descriptorRefs>
                             <descriptorRef>
                                 jar-with-dependencies
@@ -39,6 +40,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
