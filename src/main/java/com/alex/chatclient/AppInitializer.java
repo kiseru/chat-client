@@ -20,7 +20,8 @@ public class AppInitializer extends Application {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         if (charset.equals(BAD_CHARSET)) {
-            System.out.println("Используйте start.sh для запуска");
+            System.out.println("You must use right encoding! Bye!");
+            return;
         }
 
         isTest = args.length != 0 && args[0].equals("test");
