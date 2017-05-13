@@ -36,8 +36,13 @@ public class ConnectionController {
 
 
     public void connectHandle(MouseEvent mouseEvent) throws IOException {
+
         String name = nameTextField.getText();
         String group = groupTextField.getText();
+
+        if (name.equals("") || group.equals("")) {
+            return;
+        }
 
         String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
 
