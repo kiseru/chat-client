@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class MainController {
 
@@ -44,11 +45,9 @@ public class MainController {
         ConnectionController.output = outputTextArea;
         ConnectionController.dialogStage = connectionDialogStage;
 
-        connectionDialogStage.showAndWait();
+        ConnectionController.setMainController(this);
 
-        connectionButton.setDisable(true);
-        disconnectionButton.setDisable(false);
-        sendButton.setDisable(false);
+        connectionDialogStage.showAndWait();
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -59,7 +58,7 @@ public class MainController {
         this.mainForm = mainForm;
     }
 
-    public void sendAction(MouseEvent mouseEvent) throws InterruptedException {
+    public void sendAction(MouseEvent mouseEvent) throws InterruptedException, UnsupportedEncodingException {
         String message = inputTextField.getText();
         inputTextField.clear();
 

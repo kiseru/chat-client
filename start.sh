@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-java -jar target/chat-client-jar-with-dependencies.jar
+java -Dfile.encoding=utf-8 -jar target/chat-client-jar-with-dependencies.jar

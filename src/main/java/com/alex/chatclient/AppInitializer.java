@@ -1,21 +1,30 @@
 package com.alex.chatclient;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class AppInitializer extends Application {
 
+    public static boolean isTest;
     public static Stage primaryStage;
     public static MessagesReceiver receiver;
+    public final static String charset = Charset.defaultCharset().toString();
+    public final static String BAD_CHARSET = "windows-1251";
 
     public static void main(String[] args) throws IOException, InterruptedException {
+
+        if (charset.equals(BAD_CHARSET)) {
+            System.out.println("Используйте start.sh для запуска");
+        }
+
+        isTest = args.length != 0 && args[0].equals("test");
+
         launch(args);
     }
 
@@ -31,14 +40,11 @@ public class AppInitializer extends Application {
 
         Scene scene = new Scene(root);
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                try {
-                    MainController.disconnect();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                MainController.disconnect();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 

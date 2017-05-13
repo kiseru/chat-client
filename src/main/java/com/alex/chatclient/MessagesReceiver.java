@@ -32,6 +32,8 @@ public class MessagesReceiver extends Thread {
                 if ((message = reader.readLine()) != null) {
                     String text = output.getText();
 
+                    message = new String(message.getBytes(), "UTF-8");
+
                     output.setText(text + message + "\n");
                 }
             } catch (IOException e) {

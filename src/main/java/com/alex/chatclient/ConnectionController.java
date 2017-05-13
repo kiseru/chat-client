@@ -25,6 +25,7 @@ public class ConnectionController {
 
     public static TextArea output;
     public static Stage dialogStage;
+    private static MainController mainController;
 
     @FXML
     private void initialize() {}
@@ -38,7 +39,9 @@ public class ConnectionController {
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
-        Socket socket = new Socket("alexischat.clienddev.ru", 5003);
+        String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
+
+        Socket socket = new Socket(hostName, 5003);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -46,11 +49,21 @@ public class ConnectionController {
         AppInitializer.receiver.start();
 
         PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+
         writer.println(name);
         writer.println(group);
 
         MainController.out = writer;
 
+        mainController.connectionButton.setDisable(true);
+        mainController.disconnectionButton.setDisable(false);
+        mainController.sendButton.setDisable(false);
+
         dialogStage.close();
+
+    }
+
+    public static void setMainController(MainController mainController) {
+        ConnectionController.mainController = mainController;
     }
 }
