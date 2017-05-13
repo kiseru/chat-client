@@ -27,6 +27,11 @@ public class MainController {
 
     private Stage dialogStage;
     private MainForm mainForm;
+    private static boolean isConnected;
+
+    public static void setIsConnected() {
+        MainController.isConnected = true;
+    }
 
     public void connectAction(MouseEvent mouseEvent) throws IOException {
 
@@ -74,9 +79,12 @@ public class MainController {
     }
 
     public static void disconnect() throws InterruptedException {
-        out.println("disconnect exit car movie guards");
-        AppInitializer.receiver.switchOff();
-        AppInitializer.receiver.join();
+        if (isConnected) {
+            out.println("disconnect exit car movie guards");
+            AppInitializer.receiver.switchOff();
+            AppInitializer.receiver.join();
+        }
+
         AppInitializer.primaryStage.close();
     }
 }

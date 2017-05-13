@@ -64,6 +64,8 @@ public class ConnectionController {
         mainController.disconnectionButton.setDisable(false);
         mainController.sendButton.setDisable(false);
 
+        MainController.setIsConnected();
+
         dialogStage.close();
 
     }
