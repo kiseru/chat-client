@@ -101,6 +101,9 @@ public class MainController {
         // Отчищаем поля ввода
         inputTextField.clear();
 
+        // Нельзя отправлять пустые сообщения
+        if (message.equals("")) return;
+
         // Отправляем сообщение серверу
         out.println(message);
 
