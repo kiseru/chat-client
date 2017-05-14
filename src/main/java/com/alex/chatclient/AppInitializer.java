@@ -41,13 +41,7 @@ public class AppInitializer extends Application {
 
         Scene scene = new Scene(root);
 
-        primaryStage.setOnCloseRequest(event -> {
-            try {
-                MainController.disconnect();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        primaryStage.setOnCloseRequest(event -> MainController.disconnect());
 
         primaryStage.setTitle("Alexis Chat");
         primaryStage.setScene(scene);

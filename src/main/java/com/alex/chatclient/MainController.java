@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -16,11 +18,10 @@ import java.io.UnsupportedEncodingException;
 
 public class MainController {
 
-    public TextField inputTextField;
-    public TextArea outputTextArea;
-
     public static PrintWriter out;
 
+    public TextField inputTextField;
+    public TextArea outputTextArea;
     public Button disconnectionButton;
     public Button connectionButton;
     public Button sendButton;
@@ -28,6 +29,20 @@ public class MainController {
     private Stage dialogStage;
     private MainForm mainForm;
     private static boolean isConnected;
+
+    public MainController() {
+        sendButton.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                sendAction();
+            }
+        });
+
+        inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                sendAction();
+            }
+        });
+    }
 
     public static void setIsConnected() {
         MainController.isConnected = true;
@@ -63,7 +78,7 @@ public class MainController {
         this.mainForm = mainForm;
     }
 
-    public void sendAction(MouseEvent mouseEvent) throws InterruptedException, UnsupportedEncodingException {
+    public void sendAction() {
         String message = inputTextField.getText();
         inputTextField.clear();
 
@@ -74,7 +89,7 @@ public class MainController {
         }
     }
 
-    public void disconnectAction(MouseEvent mouseEvent) throws InterruptedException {
+    public void disconnectAction(MouseEvent mouseEvent) {
         disconnect();
 
         connectionButton.setDisable(false);
@@ -82,14 +97,24 @@ public class MainController {
         sendButton.setDisable(true);
     }
 
-    public static void disconnect() throws InterruptedException {
+    public static void disconnect() {
 
         // Если есть соединение, то выходим из группы
         if (isConnected) {
-            out.println("disconnect exit car movie guards");
-            AppInitializer.receiver.switchOff();
-            AppInitializer.receiver.join();
-            isConnected = false;
+            try {
+                out.println("disconnect exit car movie guards");
+                AppInitializer.receiver.switchOff();
+                AppInitializer.receiver.join();
+                isConnected = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void pressedEnterHandler(KeyEvent keyEvent) throws UnsupportedEncodingException, InterruptedException {
+        if (keyEvent.getCode() == KeyCode.ENTER && !sendButton.isDisable()) {
+            sendAction();
         }
     }
 }
