@@ -76,15 +76,20 @@ public class MainController {
 
     public void disconnectAction(MouseEvent mouseEvent) throws InterruptedException {
         disconnect();
+
+        connectionButton.setDisable(false);
+        disconnectionButton.setDisable(true);
+        sendButton.setDisable(true);
     }
 
     public static void disconnect() throws InterruptedException {
+
+        // Если есть соединение, то выходим из группы
         if (isConnected) {
             out.println("disconnect exit car movie guards");
             AppInitializer.receiver.switchOff();
             AppInitializer.receiver.join();
+            isConnected = false;
         }
-
-        AppInitializer.primaryStage.close();
     }
 }
