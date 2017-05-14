@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
 public class MainController {
 
@@ -63,7 +62,7 @@ public class MainController {
         this.mainForm = mainForm;
     }
 
-    public void sendAction(MouseEvent mouseEvent) throws InterruptedException, UnsupportedEncodingException {
+    public void sendAction(MouseEvent mouseEvent) {
         String message = inputTextField.getText();
         inputTextField.clear();
 
@@ -74,7 +73,7 @@ public class MainController {
         }
     }
 
-    public void disconnectAction(MouseEvent mouseEvent) throws InterruptedException {
+    public void disconnectAction(MouseEvent mouseEvent) {
         disconnect();
 
         connectionButton.setDisable(false);
@@ -82,14 +81,18 @@ public class MainController {
         sendButton.setDisable(true);
     }
 
-    public static void disconnect() throws InterruptedException {
+    public static void disconnect() {
 
-        // Если есть соединение, то выходим из группы
-        if (isConnected) {
-            out.println("disconnect exit car movie guards");
-            AppInitializer.receiver.switchOff();
-            AppInitializer.receiver.join();
-            isConnected = false;
+        try {
+            // Если есть соединение, то выходим из группы
+            if (isConnected) {
+                out.println("disconnect exit car movie guards");
+                AppInitializer.receiver.switchOff();
+                AppInitializer.receiver.join();
+                isConnected = false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
