@@ -49,6 +49,7 @@ public class AppInitializer extends Application {
             }
         });
 
+        primaryStage.setTitle("Alexis Chat");
         primaryStage.setScene(scene);
 
         primaryStage.show();
