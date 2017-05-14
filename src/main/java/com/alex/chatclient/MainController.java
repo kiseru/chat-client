@@ -1,5 +1,6 @@
 package com.alex.chatclient;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,44 +18,30 @@ import java.io.PrintWriter;
 
 public class MainController {
 
-    public static PrintWriter out;
-
     public TextField inputTextField;
     public TextArea outputTextArea;
     public Button disconnectionButton;
     public Button connectionButton;
     public Button sendButton;
 
-    private Stage dialogStage;
-    private MainForm mainForm;
+    public static PrintWriter out;
     private static boolean isConnected;
-
-    public MainController() {
-        sendButton.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    sendAction();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    sendAction();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public static void setIsConnected() {
         MainController.isConnected = true;
     }
 
+    @FXML
+    void initialize() {
+
+        inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER && isConnected) {
+                sendMessage();
+            }
+        });
+    }
+
+    // Действия по нажатию кнопки "Подключиться"
     public void connectAction(MouseEvent mouseEvent) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -77,36 +64,51 @@ public class MainController {
         connectionDialogStage.showAndWait();
     }
 
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
+    // Действия по нажатию кнопки "Отправить"
+    public void sendAction(MouseEvent mouseEvent) {
+        this.sendMessage();
     }
 
-    public void setMainForm(MainForm mainForm) {
-        this.mainForm = mainForm;
+    // Действия по нажатию кнопки "Откличиться"
+    public void disconnectAction(MouseEvent mouseEvent) {
+        disconnect();
+
+        connectionButton.setDisable(false);
+        disconnectionButton.setDisable(true);
+        sendButton.setDisable(true);
     }
 
-    public void sendAction() throws InterruptedException {
+    public static void disconnect() {
+
+        try {
+            // Если есть соединение, то выходим из группы
+            if (isConnected) {
+                out.println("disconnect exit car movie guards");
+                AppInitializer.receiver.switchOff();
+                AppInitializer.receiver.join();
+                isConnected = false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendMessage() {
+
+        // Получаем сообщение из поля ввода
         String message = inputTextField.getText();
+
+        // Отчищаем поля ввода
         inputTextField.clear();
 
+        // Нельзя отправлять пустые сообщения
+        if (message.equals("")) return;
+
+        // Отправляем сообщение серверу
         out.println(message);
 
         if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
             disconnect();
         }
-    }
-
-    public void disconnectAction(MouseEvent mouseEvent) throws InterruptedException {
-        disconnect();
-    }
-
-    public static void disconnect() throws InterruptedException {
-        if (isConnected) {
-            out.println("disconnect exit car movie guards");
-            AppInitializer.receiver.switchOff();
-            AppInitializer.receiver.join();
-        }
-
-        AppInitializer.primaryStage.close();
     }
 }
