@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
 public class MainController {
 
@@ -33,13 +32,21 @@ public class MainController {
     public MainController() {
         sendButton.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                sendAction();
+                try {
+                    sendAction();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                sendAction();
+                try {
+                    sendAction();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -78,7 +85,7 @@ public class MainController {
         this.mainForm = mainForm;
     }
 
-    public void sendAction() {
+    public void sendAction() throws InterruptedException {
         String message = inputTextField.getText();
         inputTextField.clear();
 
@@ -89,32 +96,17 @@ public class MainController {
         }
     }
 
-    public void disconnectAction(MouseEvent mouseEvent) {
+    public void disconnectAction(MouseEvent mouseEvent) throws InterruptedException {
         disconnect();
-
-        connectionButton.setDisable(false);
-        disconnectionButton.setDisable(true);
-        sendButton.setDisable(true);
     }
 
-    public static void disconnect() {
-
-        // Если есть соединение, то выходим из группы
+    public static void disconnect() throws InterruptedException {
         if (isConnected) {
-            try {
-                out.println("disconnect exit car movie guards");
-                AppInitializer.receiver.switchOff();
-                AppInitializer.receiver.join();
-                isConnected = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            out.println("disconnect exit car movie guards");
+            AppInitializer.receiver.switchOff();
+            AppInitializer.receiver.join();
         }
-    }
 
-    public void pressedEnterHandler(KeyEvent keyEvent) throws UnsupportedEncodingException, InterruptedException {
-        if (keyEvent.getCode() == KeyCode.ENTER && !sendButton.isDisable()) {
-            sendAction();
-        }
+        AppInitializer.primaryStage.close();
     }
 }
