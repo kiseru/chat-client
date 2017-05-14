@@ -24,10 +24,10 @@ public class MainController {
     public Button connectionButton;
     public Button sendButton;
 
-    public static PrintWriter out;
+    static PrintWriter out;
     private static boolean isConnected;
 
-    public static void setIsConnected() {
+    static void setIsConnected() {
         MainController.isConnected = true;
     }
 
@@ -69,7 +69,7 @@ public class MainController {
         this.sendMessage();
     }
 
-    // Действия по нажатию кнопки "Откличиться"
+    // Действия по нажатию кнопки "Отключиться"
     public void disconnectAction(MouseEvent mouseEvent) {
         disconnect();
 

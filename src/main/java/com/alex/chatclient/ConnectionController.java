@@ -23,8 +23,9 @@ public class ConnectionController {
     @FXML
     private Button connectButton;
 
-    public static TextArea output;
-    public static Stage dialogStage;
+    static TextArea output;
+    static Stage dialogStage;
+
     private static MainController mainController;
 
     @FXML
@@ -70,7 +71,7 @@ public class ConnectionController {
 
     }
 
-    public static void setMainController(MainController mainController) {
+    static void setMainController(MainController mainController) {
         ConnectionController.mainController = mainController;
     }
 }

@@ -1,12 +1,11 @@
 package com.alex.chatclient;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class MainForm extends Application {
 
@@ -25,12 +24,7 @@ public class MainForm extends Application {
 
         primaryStage.setResizable(false);
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                event.consume();
-            }
-        });
+        primaryStage.setOnCloseRequest(Event::consume);
 
         primaryStage.setTitle("Alexis Chat");
         primaryStage.setScene(new Scene(root, 300, 275));
