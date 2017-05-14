@@ -1,10 +1,13 @@
 package com.alex.chatclient;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -17,21 +20,28 @@ public class MainController {
 
     public TextField inputTextField;
     public TextArea outputTextArea;
-
-    public static PrintWriter out;
-
     public Button disconnectionButton;
     public Button connectionButton;
     public Button sendButton;
 
-    private Stage dialogStage;
-    private MainForm mainForm;
+    public static PrintWriter out;
     private static boolean isConnected;
 
     public static void setIsConnected() {
         MainController.isConnected = true;
     }
 
+    @FXML
+    void initialize() {
+
+        inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER && isConnected) {
+                sendMessage();
+            }
+        });
+    }
+
+    // Действия по нажатию кнопки "Подключиться"
     public void connectAction(MouseEvent mouseEvent) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -54,25 +64,12 @@ public class MainController {
         connectionDialogStage.showAndWait();
     }
 
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-
-    public void setMainForm(MainForm mainForm) {
-        this.mainForm = mainForm;
-    }
-
+    // Действия по нажатию кнопки "Отправить"
     public void sendAction(MouseEvent mouseEvent) {
-        String message = inputTextField.getText();
-        inputTextField.clear();
-
-        out.println(message);
-
-        if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
-            disconnect();
-        }
+        this.sendMessage();
     }
 
+    // Действия по нажатию кнопки "Откличиться"
     public void disconnectAction(MouseEvent mouseEvent) {
         disconnect();
 
@@ -93,6 +90,22 @@ public class MainController {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void sendMessage() {
+
+        // Получаем сообщение из поля ввода
+        String message = inputTextField.getText();
+
+        // Отчищаем поля ввода
+        inputTextField.clear();
+
+        // Отправляем сообщение серверу
+        out.println(message);
+
+        if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
+            disconnect();
         }
     }
 }
