@@ -52,6 +52,7 @@ public class ConnectionController {
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         AppInitializer.receiver = new MessagesReceiver(reader, output);
+        AppInitializer.receiver.setDaemon(true);
         AppInitializer.receiver.start();
 
         PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
