@@ -45,7 +45,7 @@ public class MainController {
     public void connectAction(MouseEvent mouseEvent) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainForm.class.getResource("/views/connection_form.fxml"));
+//        loader.setLocation(MainForm.class.getResource("/views/connection_form.fxml"));
         Pane page = loader.load();
 
         Stage connectionDialogStage = new Stage();

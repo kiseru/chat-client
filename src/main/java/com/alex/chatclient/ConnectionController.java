@@ -1,10 +1,14 @@
 package com.alex.chatclient;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -40,40 +44,57 @@ public class ConnectionController {
 
     public void connectHandle(MouseEvent mouseEvent) throws IOException {
 
+        // Получаем имя и название группы для подключения
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
+        // Если поля пустые, то ничего не делаем
         if (name.equals("") || group.equals("")) {
             return;
         }
 
+        // В зависимости от того, тестовая версия или нет, выбираем хост. Подключаемся к нему
         String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
-
         Socket socket = new Socket(hostName, 5003);
 
+        // Поток для чтения сообщений с сервера
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        AppInitializer.receiver = new MessagesReceiver(reader, output);
-        AppInitializer.receiver.start();
-
+        // Создаем поток записи для отправки на сервер сообщений
         PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
+        // Отправляем своё имя и  номер группы
         writer.println(name);
         writer.println(group);
 
-        MainController.out = writer;
+        AppInitializer.writer = writer;
+        AppInitializer.reader = reader;
 
-        mainController.connectionButton.setDisable(true);
-        mainController.disconnectionButton.setDisable(false);
-        mainController.sendButton.setDisable(false);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ConnectionController.class.getResource("/views/main_form.fxml"));
+        Pane page = loader.load();
 
-        MainController.setIsConnected();
+        Stage chatDialogStage = new Stage();
+        chatDialogStage.setTitle("AlexisChat");
+        chatDialogStage.initModality(Modality.NONE);
+        chatDialogStage.initOwner(AppInitializer.primaryStage);
 
-        dialogStage.close();
+        Scene scene = new Scene(page);
+        chatDialogStage.setScene(scene);
 
+        AppInitializer.primaryStage.close();
+
+        AppInitializer.primaryStage.setScene(scene);
+        AppInitializer.primaryStage.show();
     }
+
+
 
     static void setMainController(MainController mainController) {
         ConnectionController.mainController = mainController;
+    }
+
+    public void exitHandle(MouseEvent mouseEvent) {
+        AppInitializer.primaryStage.close();
     }
 }

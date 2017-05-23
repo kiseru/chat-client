@@ -6,7 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 public class AppInitializer extends Application {
@@ -16,6 +18,8 @@ public class AppInitializer extends Application {
     public static MessagesReceiver receiver;
     public final static String charset = Charset.defaultCharset().toString();
     public final static String BAD_CHARSET = "windows-1251";
+    public static PrintWriter writer;
+    public static BufferedReader reader;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 

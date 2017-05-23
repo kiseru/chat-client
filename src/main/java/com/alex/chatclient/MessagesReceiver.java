@@ -25,20 +25,18 @@ public class MessagesReceiver extends Thread {
 
     @Override
     public void run() {
-        while (mustWork) {
 
-            String message;
-            try {
-                if ((message = reader.readLine()) != null) {
-                    String text = output.getText();
+        String message;
+        try {
+            if (mustWork && (message = reader.readLine()) != null) {
+                String text = output.getText();
 
-                    message = new String(message.getBytes(), "UTF-8");
+                message = new String(message.getBytes(), "UTF-8");
 
-                    output.setText(text + message + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                output.setText(text + message + "\n");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
