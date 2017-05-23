@@ -24,7 +24,7 @@ public class AppInitializer extends Application {
             return;
         }
 
-        isTest = args.length != 0 && args[0].equals("test");
+        isTest = args.length != 0 && args[0].equals("-t");
 
         launch(args);
     }
