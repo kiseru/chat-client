@@ -29,7 +29,9 @@ public class ConnectionController {
     private static MainController mainController;
 
     @FXML
-    private void initialize() {}
+    private void initialize() {
+
+    }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
