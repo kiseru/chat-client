@@ -14,7 +14,7 @@ public class MainForm extends Application {
 
         AppInitializer.primaryStage = primaryStage;
 
-        String fxmlFile = "/fxml/main_form.fxml";
+        String fxmlFile = "/views/main_form.fxml";
 
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
