@@ -1,10 +1,15 @@
 package com.alex.chatclient;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -17,6 +22,7 @@ public class ConnectionController {
 
     @FXML
     private TextField nameTextField;
+
     @FXML
     private TextField groupTextField;
 
@@ -29,7 +35,9 @@ public class ConnectionController {
     private static MainController mainController;
 
     @FXML
-    private void initialize() {}
+    private void initialize() {
+
+    }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -38,41 +46,38 @@ public class ConnectionController {
 
     public void connectHandle(MouseEvent mouseEvent) throws IOException {
 
+        // Получаем имя и название группы для подключения
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
+
+        // Если поля пустые, то ничего не делаем
         if (name.equals("") || group.equals("")) {
             return;
         }
 
-        String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
+        MainController.setNameAndGroup(name, group);
 
-        Socket socket = new Socket(hostName, 5003);
+        String view = "/views/main_form.fxml";
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        FXMLLoader loader = new FXMLLoader();
+        Parent page = loader.load(getClass().getResourceAsStream(view));
 
-        AppInitializer.receiver = new MessagesReceiver(reader, output);
-        AppInitializer.receiver.setDaemon(true);
-        AppInitializer.receiver.start();
+        Scene scene = new Scene(page);
 
-        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+        AppInitializer.primaryStage.close();
 
-        writer.println(name);
-        writer.println(group);
-
-        MainController.out = writer;
-
-        mainController.connectionButton.setDisable(true);
-        mainController.disconnectionButton.setDisable(false);
-        mainController.sendButton.setDisable(false);
-
-        MainController.setIsConnected();
-
-        dialogStage.close();
-
+        AppInitializer.primaryStage.setScene(scene);
+        AppInitializer.primaryStage.show();
     }
+
+
 
     static void setMainController(MainController mainController) {
         ConnectionController.mainController = mainController;
+    }
+
+    public void exitHandle(MouseEvent mouseEvent) {
+        AppInitializer.primaryStage.close();
     }
 }

@@ -6,14 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 public class AppInitializer extends Application {
 
     public static boolean isTest;
     public static Stage primaryStage;
-    public static MessagesReceiver receiver;
     public final static String charset = Charset.defaultCharset().toString();
     public final static String BAD_CHARSET = "windows-1251";
 
@@ -34,19 +35,18 @@ public class AppInitializer extends Application {
 
         this.primaryStage = primaryStage;
 
-        String fxmlFile = "/views/main_form.fxml";
+        String fxmlFile = "/views/connection_form.fxml";
 
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
 
         Scene scene = new Scene(root);
 
-        primaryStage.setOnCloseRequest(event -> {
-            MainController.disconnect();
-        });
+        primaryStage.setOnCloseRequest(event -> primaryStage.close());
 
         primaryStage.setTitle("Alexis Chat");
         primaryStage.setScene(scene);
+        primaryStage.getScene().getStylesheets().add("/stylesheets/main.css");
 
         primaryStage.show();
     }
