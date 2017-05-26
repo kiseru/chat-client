@@ -15,11 +15,8 @@ public class AppInitializer extends Application {
 
     public static boolean isTest;
     public static Stage primaryStage;
-    public static MessagesReceiver receiver;
     public final static String charset = Charset.defaultCharset().toString();
     public final static String BAD_CHARSET = "windows-1251";
-    public static PrintWriter writer;
-    public static BufferedReader reader;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -45,7 +42,7 @@ public class AppInitializer extends Application {
 
         Scene scene = new Scene(root);
 
-        primaryStage.setOnCloseRequest(event -> MainController.disconnect());
+        primaryStage.setOnCloseRequest(event -> primaryStage.close());
 
         primaryStage.setTitle("Alexis Chat");
         primaryStage.setScene(scene);

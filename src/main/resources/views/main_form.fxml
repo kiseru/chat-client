@@ -40,7 +40,7 @@
             <AnchorPane prefHeight="50.0" prefWidth="719.0" styleClass="title" BorderPane.alignment="CENTER">
                <children>
                   <Label layoutX="537.0" layoutY="14.0" styleClass="title-text" text="AlexisChat" />
-                  <Label fx:id="name" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="14.0" styleClass="title-text" text="Name" />
+                  <Label fx:id="groupAndNameTitle" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="14.0" styleClass="title-text" text="Name" />
                </children>
             </AnchorPane>
          </top>

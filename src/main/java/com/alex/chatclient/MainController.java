@@ -14,33 +14,58 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Socket;
 
 public class MainController {
 
+    private static boolean isConnected;
+    private static String group;
+    private static String name;
+
+    private PrintWriter writer;
+    private MessagesReceiver receiver;
+
     public TextField inputTextField;
     public TextArea outputTextArea;
-    public Label name;
+    public Label groupAndNameTitle;
     public Button sendButton;
-
-    private static PrintWriter out;
-    private static boolean isConnected;
-    private static String nameAndGroup;
 
     static void setIsConnected() {
         MainController.isConnected = true;
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException {
 
-        AppInitializer.receiver = new MessagesReceiver(AppInitializer.reader, outputTextArea);
-        AppInitializer.receiver.setDaemon(true);
-        AppInitializer.receiver.start();
+        // В зависимости от того, тестовая версия или нет, выбираем хост. Подключаемся к нему
+        String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
+        Socket socket = new Socket(hostName, 5003);
 
-        name.setText(nameAndGroup);
+        // Поток для чтения сообщений с сервера
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+        // Создаем поток записи для отправки на сервер сообщений
+        writer = new PrintWriter(socket.getOutputStream(), true);
+
+        // Отправляем своё имя и  номер группы
+        writer.println(name);
+        writer.println(group);
+
+        // Подключаем поток для получения сообщений
+        receiver = new MessagesReceiver(reader, outputTextArea);
+        receiver.setDaemon(true);
+        receiver.start();
+
+        // Устанавливаем сверху группу и имя
+        groupAndNameTitle.setText(
+                String.format("%s | %s", group, name)
+        );
+
+        // Добавляем обработчик нажатия Enter для отправки сообщений
         inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 sendMessage();
@@ -53,14 +78,14 @@ public class MainController {
         this.sendMessage();
     }
 
-    public static void disconnect() {
+    public void disconnect() {
 
         try {
             // Если есть соединение, то выходим из группы
             if (isConnected) {
-                out.println("disconnect exit car movie guards");
-                AppInitializer.receiver.switchOff();
-                AppInitializer.receiver.join();
+                writer.println("disconnect exit car movie guards");
+                receiver.switchOff();
+                receiver.join();
                 isConnected = false;
             }
         } catch (InterruptedException e) {
@@ -80,7 +105,7 @@ public class MainController {
         if (message.equals("")) return;
 
         // Отправляем сообщение серверу
-        AppInitializer.writer.println(message);
+        writer.println(message);
 
         if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
             disconnect();
@@ -89,10 +114,7 @@ public class MainController {
 
     public static void setNameAndGroup(String name, String group) {
 
-        MainController.nameAndGroup = String.format(
-                "%s | %s",
-                group,
-                name
-        );
+        MainController.name = name;
+        MainController.group = group;
     }
 }

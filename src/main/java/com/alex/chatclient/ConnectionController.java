@@ -50,29 +50,13 @@ public class ConnectionController {
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
-        MainController.setNameAndGroup(name, group);
 
         // Если поля пустые, то ничего не делаем
         if (name.equals("") || group.equals("")) {
             return;
         }
 
-        // В зависимости от того, тестовая версия или нет, выбираем хост. Подключаемся к нему
-        String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
-        Socket socket = new Socket(hostName, 5003);
-
-        // Поток для чтения сообщений с сервера
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        // Создаем поток записи для отправки на сервер сообщений
-        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-
-        // Отправляем своё имя и  номер группы
-        writer.println(name);
-        writer.println(group);
-
-        AppInitializer.writer = writer;
-        AppInitializer.reader = reader;
+        MainController.setNameAndGroup(name, group);
 
         String view = "/views/main_form.fxml";
 
