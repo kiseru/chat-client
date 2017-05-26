@@ -2,25 +2,28 @@ package com.alex.chatclient;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sun.applet.Main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class MainController {
 
@@ -28,20 +31,20 @@ public class MainController {
     private static String group;
     private static String name;
 
+    private LinkedList<String> users = new LinkedList<>();
     private PrintWriter writer;
     private MessagesReceiver receiver;
 
+    public ListView usersList;
     public TextField inputTextField;
     public TextArea outputTextArea;
     public Label groupAndNameTitle;
     public Button sendButton;
 
-    static void setIsConnected() {
-        MainController.isConnected = true;
-    }
-
     @FXML
     void initialize() throws IOException {
+
+        isConnected = true;
 
         // В зависимости от того, тестовая версия или нет, выбираем хост. Подключаемся к нему
         String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
@@ -58,7 +61,7 @@ public class MainController {
         writer.println(group);
 
         // Подключаем поток для получения сообщений
-        receiver = new MessagesReceiver(reader, outputTextArea);
+        receiver = new MessagesReceiver(reader, outputTextArea, this);
         receiver.setDaemon(true);
         receiver.start();
 
@@ -73,6 +76,9 @@ public class MainController {
                 sendMessage();
             }
         });
+
+        // Отключение от сервера при нажатии кнопки и переход к окну подключения
+        AppInitializer.primaryStage.setOnCloseRequest(event -> disconnect());
     }
 
     // Действия по нажатию кнопки "Отправить"
@@ -85,11 +91,14 @@ public class MainController {
         try {
             // Если есть соединение, то выходим из группы
             if (isConnected) {
-                writer.println("disconnect exit car movie guards");
                 receiver.switchOff();
+                writer.println("disconnect exit car movie guards");
                 receiver.join();
                 isConnected = false;
             }
+
+            AppInitializer.primaryStage.close();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -118,5 +127,10 @@ public class MainController {
 
         MainController.name = name;
         MainController.group = group;
+    }
+
+    public void addUser(String name) {
+        users.add(name);
+        usersList.setItems(FXCollections.observableList(users));
     }
 }

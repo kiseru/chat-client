@@ -51,7 +51,7 @@
         </top>
 
         <left>
-          <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+          <ListView fx:id="usersList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
         </left>
     </BorderPane>
 </AnchorPane>
