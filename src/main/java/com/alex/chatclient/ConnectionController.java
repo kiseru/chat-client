@@ -79,6 +79,10 @@ public class ConnectionController {
 
         Scene scene = new Scene(page);
 
+        AppInitializer.receiver = new MessagesReceiver(reader, MainController.outputArea);
+        AppInitializer.receiver.setDaemon(true);
+        AppInitializer.receiver.start();
+
         AppInitializer.primaryStage.close();
 
         AppInitializer.primaryStage.setScene(scene);

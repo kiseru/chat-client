@@ -28,7 +28,7 @@ public class MessagesReceiver extends Thread {
 
         String message;
         try {
-            if (mustWork && (message = reader.readLine()) != null) {
+            while (mustWork && (message = reader.readLine()) != null) {
                 String text = output.getText();
 
                 message = new String(message.getBytes(), "UTF-8");

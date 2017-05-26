@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 
 public class MainController {
 
+    public static TextArea outputArea;
     public TextField inputTextField;
     public TextArea outputTextArea;
     public Label name;
@@ -34,10 +35,7 @@ public class MainController {
     @FXML
     void initialize() {
 
-        AppInitializer.receiver = new MessagesReceiver(AppInitializer.reader, outputTextArea);
-        AppInitializer.receiver.setDaemon(true);
-        AppInitializer.receiver.setPriority(Thread.MAX_PRIORITY);
-        AppInitializer.receiver.start();
+        outputArea = outputTextArea;
 
         inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
