@@ -29,11 +29,14 @@ public class MessagesReceiver extends Thread {
         String message;
         try {
             while (mustWork && (message = reader.readLine()) != null) {
-                String text = output.getText();
+                String text = output.textProperty().getValue();
 
                 message = new String(message.getBytes(), "UTF-8");
 
-                output.setText(text + message + "\n");
+                output.textProperty().setValue(text + message + "\n");
+
+                // Прокручиваем сообщения до конца вниз
+                output.setScrollTop(Double.MAX_VALUE);
             }
         } catch (IOException e) {
             e.printStackTrace();
