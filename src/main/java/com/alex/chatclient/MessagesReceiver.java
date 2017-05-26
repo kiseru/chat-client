@@ -35,11 +35,23 @@ public class MessagesReceiver extends Thread {
 
                 message = new String(message.getBytes(), "UTF-8");
 
+                // Добавление в список пользователя
                 if (message.contains(" добавился в группу.")) {
                     String newUser = message.replace(" добавился в группу.", "");
                     newUser = newUser.replace("Сервер::", "");
                     mainController.addUser(newUser);
+                } else {
+                    String newUser = message.split("::")[0];
+                    if (!newUser.equals("Сервер")) {
+                        mainController.addUser(newUser);
+                    }
+                }
 
+                // Удаление из списка пользователя
+                if (message.contains(" покинул чат")) {
+                    String leftUser = message.replace(" покинул чат", "");
+                    leftUser = leftUser.replace("Сервер::", "");
+                    mainController.deleteUser(leftUser);
                 }
 
                 output.textProperty().setValue(text + message + "\n");

@@ -130,7 +130,13 @@ public class MainController {
     }
 
     public void addUser(String name) {
+        if (users.contains(name)) return;
         users.add(name);
+        usersList.setItems(FXCollections.observableList(users));
+    }
+
+    public void deleteUser(String leftUser) {
+        users.remove(leftUser);
         usersList.setItems(FXCollections.observableList(users));
     }
 }
