@@ -26,7 +26,7 @@
           </TextArea>
         </center>
         <bottom>
-            <AnchorPane prefHeight="50.0" prefWidth="685.0" BorderPane.alignment="CENTER">x
+            <AnchorPane prefHeight="50.0" prefWidth="685.0" BorderPane.alignment="CENTER">
 
                 <TextField fx:id="inputTextField" layoutX="14.0" layoutY="5.0" prefHeight="40.0" prefWidth="554.0">
                     <font>
