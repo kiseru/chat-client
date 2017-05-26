@@ -2,6 +2,7 @@ package com.alex.chatclient;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -21,6 +22,7 @@ public class ConnectionController {
 
     @FXML
     private TextField nameTextField;
+
     @FXML
     private TextField groupTextField;
 
@@ -70,17 +72,12 @@ public class ConnectionController {
         AppInitializer.writer = writer;
         AppInitializer.reader = reader;
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(ConnectionController.class.getResource("/views/main_form.fxml"));
-        Pane page = loader.load();
+        String view = "/views/main_form.fxml";
 
-        Stage chatDialogStage = new Stage();
-        chatDialogStage.setTitle("AlexisChat");
-        chatDialogStage.initModality(Modality.NONE);
-        chatDialogStage.initOwner(AppInitializer.primaryStage);
+        FXMLLoader loader = new FXMLLoader();
+        Parent page = loader.load(getClass().getResourceAsStream(view));
 
         Scene scene = new Scene(page);
-        chatDialogStage.setScene(scene);
 
         AppInitializer.primaryStage.close();
 

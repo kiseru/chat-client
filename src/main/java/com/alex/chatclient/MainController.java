@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -20,8 +21,7 @@ public class MainController {
 
     public TextField inputTextField;
     public TextArea outputTextArea;
-    public Button disconnectionButton;
-    public Button connectionButton;
+    public Label name;
     public Button sendButton;
 
     static PrintWriter out;
@@ -34,48 +34,21 @@ public class MainController {
     @FXML
     void initialize() {
 
+        AppInitializer.receiver = new MessagesReceiver(AppInitializer.reader, outputTextArea);
+        AppInitializer.receiver.setDaemon(true);
+        AppInitializer.receiver.setPriority(Thread.MAX_PRIORITY);
+        AppInitializer.receiver.start();
+
         inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER && isConnected) {
+            if (event.getCode() == KeyCode.ENTER) {
                 sendMessage();
             }
         });
     }
 
-    // Действия по нажатию кнопки "Подключиться"
-    public void connectAction(MouseEvent mouseEvent) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(MainForm.class.getResource("/views/connection_form.fxml"));
-        Pane page = loader.load();
-
-        Stage connectionDialogStage = new Stage();
-        connectionDialogStage.setTitle("Подключение");
-        connectionDialogStage.initModality(Modality.WINDOW_MODAL);
-        connectionDialogStage.initOwner(AppInitializer.primaryStage);
-
-        Scene scene = new Scene(page);
-        connectionDialogStage.setScene(scene);
-
-        ConnectionController.output = outputTextArea;
-        ConnectionController.dialogStage = connectionDialogStage;
-
-        ConnectionController.setMainController(this);
-
-        connectionDialogStage.showAndWait();
-    }
-
     // Действия по нажатию кнопки "Отправить"
     public void sendAction(MouseEvent mouseEvent) {
         this.sendMessage();
-    }
-
-    // Действия по нажатию кнопки "Отключиться"
-    public void disconnectAction(MouseEvent mouseEvent) {
-        disconnect();
-
-        connectionButton.setDisable(false);
-        disconnectionButton.setDisable(true);
-        sendButton.setDisable(true);
     }
 
     public static void disconnect() {
@@ -105,7 +78,7 @@ public class MainController {
         if (message.equals("")) return;
 
         // Отправляем сообщение серверу
-        out.println(message);
+        AppInitializer.writer.println(message);
 
         if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
             disconnect();
