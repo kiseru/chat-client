@@ -50,6 +50,8 @@ public class ConnectionController {
         String name = nameTextField.getText();
         String group = groupTextField.getText();
 
+        MainController.setNameAndGroup(name, group);
+
         // Если поля пустые, то ничего не делаем
         if (name.equals("") || group.equals("")) {
             return;
@@ -78,10 +80,6 @@ public class ConnectionController {
         Parent page = loader.load(getClass().getResourceAsStream(view));
 
         Scene scene = new Scene(page);
-
-        AppInitializer.receiver = new MessagesReceiver(reader, MainController.outputArea);
-        AppInitializer.receiver.setDaemon(true);
-        AppInitializer.receiver.start();
 
         AppInitializer.primaryStage.close();
 

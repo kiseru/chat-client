@@ -19,14 +19,14 @@ import java.io.PrintWriter;
 
 public class MainController {
 
-    public static TextArea outputArea;
     public TextField inputTextField;
     public TextArea outputTextArea;
     public Label name;
     public Button sendButton;
 
-    static PrintWriter out;
+    private static PrintWriter out;
     private static boolean isConnected;
+    private static String nameAndGroup;
 
     static void setIsConnected() {
         MainController.isConnected = true;
@@ -35,7 +35,11 @@ public class MainController {
     @FXML
     void initialize() {
 
-        outputArea = outputTextArea;
+        AppInitializer.receiver = new MessagesReceiver(AppInitializer.reader, outputTextArea);
+        AppInitializer.receiver.setDaemon(true);
+        AppInitializer.receiver.start();
+
+        name.setText(nameAndGroup);
 
         inputTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -81,5 +85,14 @@ public class MainController {
         if (message.equalsIgnoreCase("disconnect exit car movie guards")) {
             disconnect();
         }
+    }
+
+    public static void setNameAndGroup(String name, String group) {
+
+        MainController.nameAndGroup = String.format(
+                "%s | %s",
+                group,
+                name
+        );
     }
 }
