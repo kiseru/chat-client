@@ -6,26 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 public class AppInitializer extends Application {
 
-    public static boolean isTest;
     public static Stage primaryStage;
     public final static String charset = Charset.defaultCharset().toString();
     public final static String BAD_CHARSET = "windows-1251";
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
 
         if (charset.equals(BAD_CHARSET)) {
             System.out.println("You must use right encoding! Bye!");
             return;
         }
-
-        isTest = args.length != 0 && args[0].equals("-t");
 
         launch(args);
     }
