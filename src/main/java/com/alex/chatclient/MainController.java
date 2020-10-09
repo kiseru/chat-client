@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -42,7 +43,7 @@ public class MainController {
     void initialize() throws IOException {
 
         // В зависимости от того, тестовая версия или нет, выбираем хост. Подключаемся к нему
-        String hostName = AppInitializer.isTest ? "localhost" : "alexischat.clienddev.ru";
+        String hostName = "localhost";
         Socket socket = new Socket(hostName, 5003);
 
         // Поток для чтения сообщений с сервера
