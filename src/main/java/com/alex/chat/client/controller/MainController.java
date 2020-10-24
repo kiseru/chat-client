@@ -1,5 +1,7 @@
-package com.alex.chat.client;
+package com.alex.chat.client.controller;
 
+import com.alex.chat.client.AppInitializer;
+import com.alex.chat.client.MessagesReceiver;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

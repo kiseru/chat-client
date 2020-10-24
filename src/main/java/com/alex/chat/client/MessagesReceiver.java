@@ -1,5 +1,6 @@
 package com.alex.chat.client;
 
+import com.alex.chat.client.controller.MainController;
 import javafx.scene.control.TextArea;
 import lombok.RequiredArgsConstructor;
 
