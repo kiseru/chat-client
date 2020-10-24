@@ -11,6 +11,10 @@ repositories {
 
 dependencies {
     implementation("org.openjfx:javafx-fxml:15")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+
+    compileOnly("org.projectlombok:lombok:1.18.16")
+    annotationProcessor("org.projectlombok:lombok:1.18.16")
 }
 
 java {
