@@ -23,7 +23,7 @@ java {
 }
 
 application {
-    mainClass.set("com.alex.chatclient.AppInitializer")
+    mainClass.set("com.alex.chat.client.AppInitializer")
 }
 
 javafx {

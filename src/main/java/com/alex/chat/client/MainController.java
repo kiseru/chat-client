@@ -1,4 +1,4 @@
-package com.alex.chatclient;
+package com.alex.chat.client;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

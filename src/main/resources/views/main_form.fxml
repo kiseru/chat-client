@@ -3,16 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.alex.chat.client.MainController"
             maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
             minWidth="-Infinity"
             prefHeight="432.0"
             prefWidth="693.0"
-            stylesheets="/stylesheets/main.css"
-            xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.alex.chatclient.MainController">
+            stylesheets="/stylesheets/main.css">
   <BorderPane layoutX="-1.0" layoutY="-1.0" prefHeight="432.0" prefWidth="693.0">
     <center>
 
