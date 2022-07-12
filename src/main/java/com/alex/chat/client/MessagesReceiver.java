@@ -16,7 +16,7 @@ public class MessagesReceiver extends Thread {
 
     private final MainController mainController;
 
-    private boolean mustWork;
+    private boolean mustWork = true;
 
     public void switchOff() {
         mustWork = false;
