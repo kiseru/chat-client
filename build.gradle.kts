@@ -1,22 +1,34 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.6.21" apply false
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+allprojects {
+    group = "ru.kiseru"
+    version = "1.0.0"
 
-repositories {
-    mavenCentral()
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "17"
+        }
+    }
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+subprojects {
+    repositories {
+        mavenCentral()
     }
 }
