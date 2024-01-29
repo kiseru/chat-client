@@ -45,8 +45,8 @@ private fun createReader(socket: Socket): BufferedReader {
 
 private fun createUser(inputStream: InputStream): User {
     val userRepository = UserRepositoryImpl()
-    val userAuthorizationService = UserCreationServiceImpl(userRepository)
-    return userAuthorizationService.authorize(inputStream)
+    val userCreationService = UserCreationServiceImpl(userRepository)
+    return userCreationService.authorize(inputStream)
 }
 
 private fun authorize(user: User, outputStream: OutputStream) {
