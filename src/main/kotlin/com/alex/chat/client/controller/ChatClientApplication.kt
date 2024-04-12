@@ -1,27 +1,15 @@
 package com.alex.chat.client.controller
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import ru.kiseru.chat.client.domain.user.User
-import ru.kiseru.chat.client.repository.UserRepositoryImpl
-import ru.kiseru.chat.client.service.user.impl.UserAuthorizationServiceImpl
-import ru.kiseru.chat.client.service.user.impl.UserCreationServiceImpl
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
-import java.io.OutputStream
 import java.io.PrintWriter
 import java.net.Socket
 import java.util.*
-
-private const val HOST = "localhost"
-private const val PORT = 5003
 
 fun main() = runBlocking<Unit> {
     println("Welcome to the alexis chat!")
@@ -29,14 +17,14 @@ fun main() = runBlocking<Unit> {
     val socket = createConnection()
     val reader = createReader(socket)
     val writer = createWriter(socket)
-    val user = createUser(System.`in`)
-    authorize(user, socket.getOutputStream())
+    val signInDto = readAuthorizationData(scanner)
+    signIn(writer, signInDto)
     launch { startReceiver(reader) }
     launch { startSender(scanner, writer) }
 }
 
 private fun createConnection(): Socket {
-    return Socket(HOST, PORT)
+    return Socket("localhost", 5003)
 }
 
 private fun createReader(socket: Socket): BufferedReader {
@@ -47,15 +35,17 @@ private fun createWriter(socket: Socket): PrintWriter {
     return PrintWriter(socket.getOutputStream(), true)
 }
 
-private fun createUser(inputStream: InputStream): User {
-    val userRepository = UserRepositoryImpl()
-    val userAuthorizationService = UserCreationServiceImpl(userRepository)
-    return userAuthorizationService.authorize(inputStream)
+private fun readAuthorizationData(scanner: Scanner): SignInDto {
+    print("Enter your username: ")
+    val username = scanner.next()
+    print("Enter group for joining: ")
+    val groupName = scanner.next()
+    return SignInDto(username, groupName)
 }
 
-private fun authorize(user: User, outputStream: OutputStream) {
-    val userAuthorizationService = UserAuthorizationServiceImpl()
-    userAuthorizationService.authorize(user, outputStream)
+private fun signIn(writer: PrintWriter, signInDto: SignInDto) {
+    writer.println(signInDto.username)
+    writer.println(signInDto.groupName)
 }
 
 private suspend fun startReceiver(reader: BufferedReader) = withContext(Dispatchers.IO) {
@@ -86,5 +76,10 @@ private fun checkExit(msg: String) {
         throw ExitException()
     }
 }
+
+data class SignInDto(
+    val username: String,
+    val groupName: String,
+)
 
 class ExitException : RuntimeException()
