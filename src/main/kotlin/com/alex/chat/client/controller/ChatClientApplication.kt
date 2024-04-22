@@ -1,28 +1,29 @@
 package com.alex.chat.client.controller
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.Socket
 import java.util.Scanner
 
-fun main() = runBlocking<Unit> {
-    println("Welcome to the alexis chat!")
-    val socket = Socket("localhost", 5003)
-    val authorities = readAuthorities()
-    val outputStream = socket.getOutputStream()
-    authorize(outputStream, authorities)
-    launch { startReceiver(socket.getInputStream()) }
-    launch { startSender(outputStream) }
-}
+suspend fun main(): Unit =
+    coroutineScope {
+        println("Welcome to the alexis chat!")
+        val socket = Socket("localhost", 5003)
+        val authorities = readAuthorities()
+        val outputStream = socket.getOutputStream()
+        authorize(outputStream, authorities)
+        launch { startReceiver(socket.getInputStream()) }
+        launch { startSender(outputStream) }
+    }
 
 private suspend fun readAuthorities(): Authorities {
     val scanner = Scanner(System.`in`)
@@ -33,16 +34,17 @@ private suspend fun readAuthorities(): Authorities {
     return Authorities(username, groupName)
 }
 
-private suspend fun authorize(outputStream: OutputStream, authorities: Authorities) = withContext(Dispatchers.IO) {
-    val writer = outputStream.bufferedWriter()
-    writer.write(authorities.username)
-    writer.newLine()
-    writer.write(authorities.groupName)
-    writer.newLine()
-    writer.flush()
-}
+private suspend fun authorize(outputStream: OutputStream, authorities: Authorities) =
+    withContext(Dispatchers.IO) {
+        val writer = outputStream.bufferedWriter()
+        writer.write(authorities.username)
+        writer.newLine()
+        writer.write(authorities.groupName)
+        writer.newLine()
+        writer.flush()
+    }
 
-private suspend fun startReceiver(inputStream: InputStream) = withContext(Dispatchers.IO) {
+private suspend fun startReceiver(inputStream: InputStream) =
     flow<String> {
         val reader = inputStream.bufferedReader()
         while (true) {
@@ -51,7 +53,7 @@ private suspend fun startReceiver(inputStream: InputStream) = withContext(Dispat
     }
         .flowOn(Dispatchers.IO)
         .collect { println(it) }
-}
+
 
 private suspend fun startSender(outputStream: OutputStream) {
     val writer = outputStream.bufferedWriter()
